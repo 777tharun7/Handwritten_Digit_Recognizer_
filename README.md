@@ -1,37 +1,40 @@
+<div align="center">
+
 # Handwritten Digit Recognizer
 
-A computer-vision project focused on classifying images of handwritten digits.
+**Convolutional neural network trained on the Keras MNIST dataset**
 
-## Workflow
-1. Document the dataset source, licence, image dimensions, labels, and train/test partitions.
-2. Describe the implemented resizing, normalization, and other preprocessing steps.
-3. Document the model architecture and key hyperparameters.
-4. Record training settings such as epochs, batch size, optimizer, and random seed where available.
-5. Evaluate on a held-out test set rather than training data.
-6. Include examples of incorrect predictions and a confusion matrix.
-7. Document how to run inference if that functionality is implemented.
+[![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white)](https://www.python.org/)
+[![TensorFlow](https://img.shields.io/badge/TensorFlow-FF6F00?style=flat-square&logo=tensorflow&logoColor=white)](https://www.tensorflow.org/)
+[![MNIST](https://img.shields.io/badge/Dataset-MNIST-39D98A?style=flat-square)](https://keras.io/api/datasets/mnist/)
 
-## Results
-Fill these fields with measured results from the current code.
+</div>
 
-| Item | Result |
-|---|---|
-| Dataset and version | Add verified source |
-| Input image shape | Add actual dimensions |
-| Model architecture | Add implemented details |
-| Training configuration | Add actual settings |
-| Test accuracy | Add measured result |
-| Per-class metrics / confusion matrix | Add generated output |
-| Inference command or demo | Add verified instructions |
+## Overview
 
-## Reproducibility
-Document the Python version, dependencies, dataset instructions, training and evaluation commands, and model-checkpoint location. Do not commit large model files unless appropriate for the repository.
+A computer-vision notebook that loads MNIST through `tensorflow.keras.datasets`, prepares the digit images and labels, trains a CNN, evaluates it on the MNIST test split, and saves a Keras model artifact.
 
-## Limitations
-Writing style, image quality, rotation, and preprocessing differences can affect predictions. State the conditions under which the model has been tested.
+## Implementation
 
-## Source
-[View repository](https://github.com/777tharun7/Handwritten_Digit_Recognizer_)
+- Notebook: [mnist.ipynb](mnist.ipynb)
+- Saved model: [mnist_digit_recognizer.h5](mnist_digit_recognizer.h5)
+- Model layers in the notebook include `Conv2D`, `MaxPooling2D`, `Flatten`, and `Dense`.
+- The notebook trains for five epochs in its recorded run.
 
-## Author
-Tharun Devanaboina
+## Run
+
+```bash
+python -m pip install numpy matplotlib tensorflow pillow
+```
+
+Open `mnist.ipynb` in Jupyter or Google Colab and execute the cells in order. Keras downloads the MNIST dataset when it is first requested, so network access may be needed for initial setup.
+
+## Evaluation
+
+The saved notebook output reports **97.10% test accuracy** on the Keras MNIST test split. This is the recorded notebook result and has not been independently rerun during this repository audit.
+
+For a stronger evaluation report, keep the test split untouched during model selection, add a confusion matrix and per-class metrics, and show examples of incorrect predictions. Test performance on MNIST does not guarantee performance on photographs or handwritten images from other sources.
+
+## Repository
+
+[Open source repository](https://github.com/777tharun7/Handwritten_Digit_Recognizer_)
