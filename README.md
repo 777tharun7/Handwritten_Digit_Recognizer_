@@ -31,9 +31,9 @@ Open `mnist.ipynb` in Jupyter or Google Colab and execute the cells in order. Ke
 
 ## Evaluation
 
-The saved notebook output reports **97.10% test accuracy** on the Keras MNIST test split. This is the recorded notebook result and has not been independently rerun during this repository audit.
+The saved notebook records **97.10% validation accuracy** at epoch 5. The notebook first reduces MNIST to 10,000 training examples and 2,000 test examples, then passes that same 2,000-example test subset as `validation_data` during training. It subsequently evaluates on that same subset. Therefore, 97.10% is a notebook-reported score on a subset already used for validation/model monitoring; it is **not an untouched independent test result** and has not been independently rerun during this audit.
 
-For a stronger evaluation report, keep the test split untouched during model selection, add a confusion matrix and per-class metrics, and show examples of incorrect predictions. Test performance on MNIST does not guarantee performance on photographs or handwritten images from other sources.
+For a defensible final test score, reserve a test set that is never passed to `model.fit`, use a separate validation split for model selection, and report the sample counts, random seed, confusion matrix, and per-class precision/recall/F1. MNIST performance does not guarantee performance on photographs or handwriting from other sources.
 
 ## Repository
 
