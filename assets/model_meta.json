@@ -1,0 +1,77 @@
+{
+  "totalFloats": 225034,
+  "tensors": [
+    {
+      "name": "conv1_kernel",
+      "shape": [
+        3,
+        3,
+        1,
+        32
+      ],
+      "offset": 0,
+      "length": 288
+    },
+    {
+      "name": "conv1_bias",
+      "shape": [
+        32
+      ],
+      "offset": 288,
+      "length": 32
+    },
+    {
+      "name": "conv2_kernel",
+      "shape": [
+        3,
+        3,
+        32,
+        64
+      ],
+      "offset": 320,
+      "length": 18432
+    },
+    {
+      "name": "conv2_bias",
+      "shape": [
+        64
+      ],
+      "offset": 18752,
+      "length": 64
+    },
+    {
+      "name": "dense1_kernel",
+      "shape": [
+        1600,
+        128
+      ],
+      "offset": 18816,
+      "length": 204800
+    },
+    {
+      "name": "dense1_bias",
+      "shape": [
+        128
+      ],
+      "offset": 223616,
+      "length": 128
+    },
+    {
+      "name": "dense2_kernel",
+      "shape": [
+        128,
+        10
+      ],
+      "offset": 223744,
+      "length": 1280
+    },
+    {
+      "name": "dense2_bias",
+      "shape": [
+        10
+      ],
+      "offset": 225024,
+      "length": 10
+    }
+  ]
+}

@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Handwritten Digit Recognizer — MNIST CNN</title>
+  <meta name="description" content="Draw or upload a handwritten digit (0–9) and classify it in real time with a Convolutional Neural Network trained on MNIST, running 100% in your browser." />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="brand">
+        <span class="brand-badge" aria-hidden="true">0–9</span>
+        <div>
+          <h1>Handwritten Digit Recognizer</h1>
+          <p class="subtitle">MNIST Convolutional Neural Network · 100% client-side inference</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <span id="model-status" class="status-pill status-loading" role="status" aria-live="polite">
+          Loading model…
+        </span>
+        <a class="repo-link" href="https://github.com/777tharun7/Handwritten_Digit_Recognizer_" target="_blank" rel="noopener noreferrer">
+          GitHub Repo
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container main-grid">
+    <section class="card workspace-card" aria-labelledby="draw-heading">
+      <div class="card-header">
+        <h2 id="draw-heading">Draw or Upload a Digit</h2>
+        <div class="mode-tabs" role="tablist" aria-label="Input mode">
+          <button type="button" class="tab-btn active" role="tab" aria-selected="true" id="tab-draw" data-mode="draw">Draw</button>
+          <button type="button" class="tab-btn" role="tab" aria-selected="false" id="tab-upload" data-mode="upload">Upload Image</button>
+        </div>
+      </div>
+
+      <div id="draw-panel" class="input-panel">
+        <div class="canvas-stage">
+          <canvas
+            id="draw-canvas"
+            width="280"
+            height="280"
+            aria-label="Drawing canvas for handwritten digit. Draw a single digit from 0 to 9."
+          ></canvas>
+          <div id="canvas-hint" class="canvas-hint" aria-hidden="true">
+            Draw a digit (0–9) here
+          </div>
+        </div>
+
+        <div class="controls-row">
+          <label class="brush-control" for="brush-size">
+            <span>Brush</span>
+            <input id="brush-size" type="range" min="10" max="32" value="18" />
+            <span id="brush-value" class="mono">18px</span>
+          </label>
+          <div class="btn-group">
+            <button type="button" id="clear-btn" class="btn btn-secondary" title="Clear canvas (Shortcut: C)">Clear</button>
+            <button type="button" id="predict-btn" class="btn btn-primary">Predict</button>
+          </div>
+        </div>
+
+        <div class="samples-bar">
+          <span class="samples-label">Try sample:</span>
+          <div class="sample-buttons" role="group" aria-label="Draw sample digits">
+            <button type="button" class="sample-btn" data-digit="0">0</button>
+            <button type="button" class="sample-btn" data-digit="1">1</button>
+            <button type="button" class="sample-btn" data-digit="2">2</button>
+            <button type="button" class="sample-btn" data-digit="3">3</button>
+            <button type="button" class="sample-btn" data-digit="4">4</button>
+            <button type="button" class="sample-btn" data-digit="5">5</button>
+            <button type="button" class="sample-btn" data-digit="6">6</button>
+            <button type="button" class="sample-btn" data-digit="7">7</button>
+            <button type="button" class="sample-btn" data-digit="8">8</button>
+            <button type="button" class="sample-btn" data-digit="9">9</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="upload-panel" class="input-panel hidden">
+        <label class="dropzone" for="image-upload" id="dropzone">
+          <input id="image-upload" type="file" accept="image/*" class="sr-only" />
+          <span class="dropzone-title">Choose or drop a digit image</span>
+          <span class="dropzone-sub">PNG, JPG, or WebP · Automatically resized to 28×28</span>
+        </label>
+        <div class="upload-options">
+          <label class="checkbox-label">
+            <input type="checkbox" id="auto-invert" checked />
+            <span>Auto-invert light backgrounds (matches notebook preprocessing)</span>
+          </label>
+        </div>
+        <div id="upload-preview-wrap" class="upload-preview-wrap hidden">
+          <img id="upload-preview" alt="Uploaded digit preview" />
+        </div>
+      </div>
+    </section>
+
+    <section class="card results-card" aria-labelledby="results-heading">
+      <div class="card-header">
+        <h2 id="results-heading">Prediction</h2>
+        <span id="inference-time" class="mono muted">—</span>
+      </div>
+
+      <div class="prediction-hero">
+        <div class="predicted-digit-box" aria-live="polite">
+          <span class="prediction-label">Predicted Digit</span>
+          <span id="predicted-digit" class="predicted-digit">—</span>
+          <span id="predicted-confidence" class="predicted-confidence">Draw or select a digit</span>
+        </div>
+
+        <div class="model-input-preview">
+          <span class="preview-title">28×28 Model Input</span>
+          <canvas id="preview-canvas" width="28" height="28" aria-label="28 by 28 normalized grayscale input sent to the CNN"></canvas>
+          <span class="preview-caption">Centered &amp; normalized</span>
+        </div>
+      </div>
+
+      <div class="probabilities-section">
+        <h3>Class Probabilities</h3>
+        <div id="prob-bars" class="prob-bars" aria-label="Confidence scores for digits 0 through 9"></div>
+      </div>
+
+      <details class="arch-details">
+        <summary>Model Architecture (from <code>mnist_digit_recognizer.h5</code>)</summary>
+        <ul class="arch-list">
+          <li><strong>Conv2D</strong>: 32 filters, 3×3, ReLU → (26×26×32)</li>
+          <li><strong>MaxPooling2D</strong>: 2×2 → (13×13×32)</li>
+          <li><strong>Conv2D</strong>: 64 filters, 3×3, ReLU → (11×11×64)</li>
+          <li><strong>MaxPooling2D</strong>: 2×2 → (5×5×64)</li>
+          <li><strong>Flatten + Dense</strong>: 1600 → 128 (ReLU) → 10 (Softmax)</li>
+          <li><strong>Parameters</strong>: 225,034 float32 weights</li>
+        </ul>
+      </details>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>
+        Powered by the trained CNN weights from
+        <a href="mnist.ipynb">mnist.ipynb</a> / <code>mnist_digit_recognizer.h5</code>.
+        Inference runs locally in your browser with zero server calls.
+      </p>
+    </div>
+  </footer>
+
+  <script src="app.js" type="module"></script>
+</body>
+</html>
